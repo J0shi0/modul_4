@@ -1,4 +1,5 @@
 from django.db import models
+from users.models import User
 
 
 class Task(models.Model):
@@ -9,6 +10,7 @@ class Task(models.Model):
         (STATUS_DRAFT, 'Черновик'),
         (STATUS_PUBLISHED, 'Опубликована')
     )
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks', null=True, blank=True)
 
     title = models.CharField(max_length=300, verbose_name='Тема задачи')
     description = models.CharField(max_length=300, null=True, blank=True, verbose_name='Описания')

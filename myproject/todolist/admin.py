@@ -8,7 +8,7 @@ class CommentInline(admin.TabularInline):
 
 
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ('title', 'status', 'author', 'deadline_date')
+    list_display = ('title', 'status', 'author', 'owner', 'deadline_date')
     search_fields = ('title', 'description')
     list_filter = ('deadline_date', 'author')
 
