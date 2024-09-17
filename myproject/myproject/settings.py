@@ -14,6 +14,8 @@ from pathlib import Path
 
 from datetime import timedelta
 
+from celery.schedules import crontab
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -90,6 +92,37 @@ DATABASES = {
         'PORT': '5432',        # Порт, по умолчанию '5432', опционально
     }
 }
+
+# Настройки кеширование на Redis
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+# URL подключения к Redis
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+
+# Backend для хранения результатов задач
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+CELERY_BEAT_SCHEDULE = {
+    'check_tasks_deadlines_in_the_day_end': {
+        'task': 'myproject.tasks.check_tasks_deadlines',
+        'schedule': crontab(hour=23, minute=59),  # Выполнение задачи в конце каждого дня
+    },
+}
+
+# Настройки Celery
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
 
 
 # DRF settings
