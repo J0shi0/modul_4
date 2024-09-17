@@ -16,6 +16,8 @@ from datetime import timedelta
 
 from celery.schedules import crontab
 
+from decouple import config
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,10 +26,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-bc8=30=5w((jxusvod@x(b$o-c@&ooc-2hx*ue%6nt)nxb+u0q'
+SECRET_KEY = config('SECRET_KEY', default='your_default_secret_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -85,11 +87,11 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',  # Имя вашей базы данных
-        'USER': 'postgres',      # Имя пользователя
-        'PASSWORD': 'dPls23[{lsfjjo_oq0233jqk',  # Пароль пользователя
-        'HOST': 'localhost',   # Хост, по умолчанию 'localhost', опционально
-        'PORT': '5432',        # Порт, по умолчанию '5432', опционально
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST', default='localhost'),
+        'PORT': config('DB_PORT', default=5432, cast=int),
     }
 }
 
